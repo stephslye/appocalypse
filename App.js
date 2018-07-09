@@ -4,7 +4,6 @@ import { createStackNavigator } from 'react-navigation';
 import axios from 'axios';
 import Calendar from 'react-native-calendar-datepicker';
 import Moment from 'moment';
-import { Font } from 'expo';
 import Expo from 'expo';
 
 
@@ -18,14 +17,15 @@ class HomeScreen extends React.Component {
 
       <View style={styles.home}>
         <Text style={styles.title}>!!!APPOCALYPSE!!!</Text>
-        <Text>is an app that tells you about the asteroids near Earth on a given day, and whether any of them are potentially hazardous.</Text>
+        <Text style={styles.para}>is an app that tells you about the asteroids near Earth on a given day, and whether any of them are potentially hazardous.</Text>
         <View style={styles.frontbutton}>
           <Button title="click here to choose a date" onPress={() => this.props.navigation.navigate('Calendar')} color='green' />
         </View>
 
         <View style={styles.quote}>
-          <Text>Potentially Hazardous Asteroids (PHAs) are currently defined based on parameters that measure the asteroid’s potential to make threatening close approaches to the Earth.</Text> <Text style={styles.red}>Specifically, all asteroids with a minimum orbit intersection distance (MOID) of 0.05 au or less and an absolute magnitude (H) of 22.0 or less are considered PHAs.</Text>
-          <Text>~Center for Near Earth Object Studies, Nasa</Text>
+          <Text style={styles.para}>Potentially Hazardous Asteroids (PHAs) are currently defined based on parameters that measure the asteroid’s potential to make threatening close approaches to the Earth.</Text>
+          <Text style={[styles.red, styles.para]}>Specifically, all asteroids with a minimum orbit intersection distance (MOID) of 0.05 au or less and an absolute magnitude (H) of 22.0 or less are considered PHAs.</Text>
+          <Text style={styles.para}>~Center for Near Earth Object Studies, Nasa</Text>
         </View>
       </View>
 
@@ -163,7 +163,7 @@ class IndexScreen extends React.Component {
     return (
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>
-          the outlook for
+          the asteroids passing Earth on
         </Text>
         <Text style={styles.title}>
           {this.state.today}
@@ -171,9 +171,9 @@ class IndexScreen extends React.Component {
         <View style={styles.content}>
           {this.state.asteroids.map(asteroid =>
             <TouchableHighlight onPress={() => this.onPress(asteroid)} key={asteroid.name}>
-              <View style={styles.button}><Text>asteroid name: {asteroid.name}</Text>
-                {!asteroid.is_potentially_hazardous_asteroid && <Text style={styles.green}>i am a benign asteroid!</Text>}
-                {asteroid.is_potentially_hazardous_asteroid && <Text style={styles.red}>i am a potentially hazardous asteroid.</Text>}</View>
+              <View style={styles.button}><Text style={styles.para}>asteroid name: {asteroid.name}</Text>
+                {!asteroid.is_potentially_hazardous_asteroid && <Text style={[styles.green, styles.para]}>i am a benign asteroid!</Text>}
+                {asteroid.is_potentially_hazardous_asteroid && <Text style={[styles.red, styles.para]}>i am a potentially hazardous asteroid.</Text>}</View>
             </TouchableHighlight>)}
         </View>
       </ScrollView>
@@ -212,35 +212,41 @@ class AsteroidScreen extends React.Component {
      <ScrollView contentContainerStyle={styles.container}>
        <View style={styles.content}>
          <View style={styles.roll}>
-           <Text>my name:</Text> <Text>{asteroid.name}</Text>
+           <Text style={styles.para}>my name:</Text>
+           <Text style={styles.para}>{asteroid.name}</Text>
          </View>
          <View style={styles.roll}>
-           <Text>my absolute magnitude:</Text>
-           <Text>{asteroid.absolute_magnitude_h}</Text>
+           <Text style={styles.para}>my absolute magnitude:</Text>
+           <Text style={styles.para}>{asteroid.absolute_magnitude_h}</Text>
 
          </View>
          <View style={styles.roll}>
-           <Text>date of closest approach:</Text> <Text>{asteroid.close_approach_data[0].close_approach_date}</Text>
+           <Text style={styles.para}>date of closest approach:</Text>
+           <Text style={styles.para}>{asteroid.close_approach_data[0].close_approach_date}</Text>
          </View>
          <View style={styles.roll}>
-           <Text>what i am orbiting:</Text> <Text>{asteroid.close_approach_data[0].orbiting_body}</Text>
+           <Text style={styles.para}>what i am orbiting:</Text>
+           <Text style={styles.para}>{asteroid.close_approach_data[0].orbiting_body}</Text>
          </View>
          <View style={styles.roll}>
-           <Text>how big i am: </Text>
-           <Text>between {asteroid.estimated_diameter.kilometers.estimated_diameter_min}km and {asteroid.estimated_diameter.kilometers.estimated_diameter_max}km in diameter</Text>
+           <Text style={styles.para}>how big i am: </Text>
+           <Text style={styles.para}>between {asteroid.estimated_diameter.kilometers.estimated_diameter_min}km and {asteroid.estimated_diameter.kilometers.estimated_diameter_max}km in diameter</Text>
          </View>
          <View style={styles.roll}>
-           <Text>how fast i am going:</Text> <Text>{asteroid.close_approach_data[0].relative_velocity.kilometers_per_second}km per second</Text>
+           <Text style={styles.para}>how fast i am going:</Text>
+           <Text style={styles.para}>{asteroid.close_approach_data[0].relative_velocity.kilometers_per_second}km per second</Text>
          </View>
 
          {Number(asteroid.close_approach_data[0].miss_distance.astronomical) <= 0.05 && <View style={styles.roll}>
-           <Text style={styles.red}>distance by which i will miss Earth:</Text> <Text style={styles.red}>{asteroid.close_approach_data[0].miss_distance.kilometers}km or {asteroid.close_approach_data[0].miss_distance.astronomical}au</Text>
-           <Text style={styles.red}>i might be too close for comfort...</Text>
+           <Text style={[styles.red, styles.para]}>distance by which i will miss Earth:</Text>
+           <Text style={[styles.red, styles.para]}>{asteroid.close_approach_data[0].miss_distance.kilometers}km or {asteroid.close_approach_data[0].miss_distance.astronomical}au</Text>
+           <Text style={[styles.red, styles.para]}>i might be too close for comfort...</Text>
          </View>}
 
          {Number(asteroid.close_approach_data[0].miss_distance.astronomical) > 0.05 && <View style={styles.roll}>
-           <Text style={styles.green}>distance by which i will miss Earth:</Text> <Text style={styles.green}>{asteroid.close_approach_data[0].miss_distance.kilometers}km or {asteroid.close_approach_data[0].miss_distance.astronomical}au</Text>
-           <Text style={styles.green}>i bid you hello from a safe distance!</Text>
+           <Text style={[styles.green, styles.para]}>distance by which i will miss Earth:</Text>
+           <Text style={[styles.green, styles.para]}>{asteroid.close_approach_data[0].miss_distance.kilometers}km or {asteroid.close_approach_data[0].miss_distance.astronomical}au</Text>
+           <Text style={[styles.green, styles.para]}>i bid you hello from a safe distance!</Text>
          </View>}
 
          <View style={styles.guestbook}>
@@ -249,15 +255,15 @@ class AsteroidScreen extends React.Component {
            {this.state.dates.map(date =>
              <View key={date.miss_distance.astronomical} style={styles.roll}>
                {Number(date.miss_distance.astronomical) <= 0.05 && <View>
-                 <Text style={styles.red}>DANGER DAY</Text>
-                 <Text style={styles.red}>date: {date.close_approach_date}</Text>
-                 <Text style={styles.red}>distance from Earth: </Text>
-                 <Text style={styles.red}>{date.miss_distance.kilometers}km or {date.miss_distance.astronomical}au</Text>
+                 <Text style={[styles.red, styles.para]}>DANGER DAY</Text>
+                 <Text style={[styles.red, styles.para]}>date: {date.close_approach_date}</Text>
+                 <Text style={[styles.red, styles.para]}>distance from Earth: </Text>
+                 <Text style={[styles.red, styles.para]}>{date.miss_distance.kilometers}km or {date.miss_distance.astronomical}au</Text>
                </View>}
                {Number(date.miss_distance.astronomical) > 0.05 && <View>
-                 <Text>date: {date.close_approach_date}</Text>
-                 <Text>distance from Earth: </Text>
-                 <Text>{date.miss_distance.kilometers}km or {date.miss_distance.astronomical}au</Text>
+                 <Text style={styles.para}>date: {date.close_approach_date}</Text>
+                 <Text style={styles.para}>distance from Earth: </Text>
+                 <Text style={styles.para}>{date.miss_distance.kilometers}km or {date.miss_distance.astronomical}au</Text>
                </View>}
              </View>)}
          </View>
@@ -300,7 +306,8 @@ export default class App extends React.Component {
 
   async componentWillMount() {
     await Expo.Font.loadAsync({
-      'LuckiestGuy-Regular': require('./assets/fonts/LuckiestGuy-Regular.ttf')
+      'LuckiestGuy-Regular': require('./assets/fonts/LuckiestGuy-Regular.ttf'),
+      'OpenSans-Regular': require('./assets/fonts/Open_Sans/OpenSans-Regular.ttf')
     });
     this.setState({isReady: true});
   }
@@ -354,6 +361,11 @@ const styles = StyleSheet.create({
     color: 'purple'
   },
 
+  para: {
+    fontFamily: 'OpenSans-Regular',
+    fontSize: 20
+  },
+
   content: {
     flexDirection: 'column',
     alignItems: 'center',
@@ -373,8 +385,9 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     backgroundColor: 'pink',
     borderColor: 'black',
-    width: 250,
-    height: 80,
+    width: 300,
+    height: 120,
+    padding: 5,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
