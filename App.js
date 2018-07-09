@@ -14,21 +14,20 @@ class HomeScreen extends React.Component {
 
   render() {
     return (
-
-      <View style={styles.home}>
-        <Text style={styles.title}>!!!APPOCALYPSE!!!</Text>
-        <Text style={styles.para}>is an app that tells you about the asteroids near Earth on a given day, and whether any of them are potentially hazardous.</Text>
-        <View style={styles.frontbutton}>
-          <Button title="click here to choose a date" onPress={() => this.props.navigation.navigate('Calendar')} color='green' />
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.home}>
+          <Text style={styles.title}>!!!APPOCALYPSE!!!</Text>
+          <Text style={styles.para}>is an app that tells you about the asteroids near Earth on a given day, and whether any of them are potentially hazardous.</Text>
+          <View style={styles.frontbutton}>
+            <Button title="click here to choose a date" onPress={() => this.props.navigation.navigate('Calendar')} color='green' />
+          </View>
+          <View style={styles.quote}>
+            <Text style={styles.para}>Potentially Hazardous Asteroids (PHAs) are currently defined based on parameters that measure the asteroid’s potential to make threatening close approaches to the Earth.</Text>
+            <Text style={[styles.red, styles.para]}>Specifically, all asteroids with a minimum orbit intersection distance (MOID) of 0.05 au or less and an absolute magnitude (H) of 22.0 or less are considered PHAs.</Text>
+            <Text style={styles.para}>~Center for Near Earth Object Studies, Nasa</Text>
+          </View>
         </View>
-
-        <View style={styles.quote}>
-          <Text style={styles.para}>Potentially Hazardous Asteroids (PHAs) are currently defined based on parameters that measure the asteroid’s potential to make threatening close approaches to the Earth.</Text>
-          <Text style={[styles.red, styles.para]}>Specifically, all asteroids with a minimum orbit intersection distance (MOID) of 0.05 au or less and an absolute magnitude (H) of 22.0 or less are considered PHAs.</Text>
-          <Text style={styles.para}>~Center for Near Earth Object Studies, Nasa</Text>
-        </View>
-      </View>
-
+      </ScrollView>
     );
   }
 }
@@ -255,7 +254,6 @@ class AsteroidScreen extends React.Component {
            {this.state.dates.map(date =>
              <View key={date.miss_distance.astronomical} style={styles.roll}>
                {Number(date.miss_distance.astronomical) <= 0.05 && <View>
-                 <Text style={[styles.red, styles.para]}>DANGER DAY</Text>
                  <Text style={[styles.red, styles.para]}>date: {date.close_approach_date}</Text>
                  <Text style={[styles.red, styles.para]}>distance from Earth: </Text>
                  <Text style={[styles.red, styles.para]}>{date.miss_distance.kilometers}km or {date.miss_distance.astronomical}au</Text>
@@ -337,7 +335,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    margin: 50
+    margin: 10
   },
 
   center: {
@@ -403,7 +401,6 @@ const styles = StyleSheet.create({
   },
 
   roll: {
-    height: 60,
     alignItems: 'center',
     justifyContent: 'center',
     margin: 30
