@@ -46,20 +46,20 @@ class CalendarScreen extends React.Component {
 
   render() {
     return (
-<View>
-      <Calendar
-    onChange={(date) => this.setState({date})}
-    selected={this.state.date}
-    // We use Moment.js to give the minimum and maximum dates.
-    minDate={Moment().subtract(10, 'years').startOf('day')}
-    maxDate={Moment().add(10, 'years').startOf('day')}
-    />
+      <View>
+        <Calendar
+          onChange={(date) => this.setState({date})}
+          selected={this.state.date}
+          // We use Moment.js to give the minimum and maximum dates.
+          minDate={Moment().subtract(10, 'years').startOf('day')}
+          maxDate={Moment().add(10, 'years').startOf('day')}
+        />
 
 
-    <TouchableHighlight onPress={() => this.onPress()}>
-          <View style={styles.frontbutton}><Text>see the asteroids</Text></View></TouchableHighlight>
 
-  </View>
+        <View style={styles.frontbutton}><Button title='see the asteroids' onPress={() => this.onPress()} color='green'/></View>
+
+      </View>
 
     );
   }
@@ -245,7 +245,7 @@ class AsteroidScreen extends React.Component {
            <Text>all my known and knowable visits: {this.state.dates.length}</Text>
 
            {this.state.dates.map(date =>
-             <View key={date.close_approach_date} style={styles.roll}>
+             <View key={date.miss_distance.astronomical} style={styles.roll}>
                {Number(date.miss_distance.astronomical) <= 0.05 && <View>
                  <Text style={styles.red}>DANGER DAY</Text>
                  <Text style={styles.red}>date: {date.close_approach_date}</Text>
