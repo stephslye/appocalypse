@@ -2,40 +2,149 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableHighlight, ScrollView, Button } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import axios from 'axios';
+import Calendar from 'react-native-calendar-datepicker';
+import Moment from 'moment';
 
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
     title: 'APPOCALYPSE'
   };
+
   render() {
     return (
+
       <View style={styles.home}>
-        <Text>!!!APPOCALYPSE!!! is an app that tells you about the asteroids that are currently passing Earth, and whether any of them are potentially hazardous.</Text>
+        <Text>!!!APPOCALYPSE!!! is an app that tells you about the asteroids near Earth on a given day, and whether any of them are potentially hazardous.</Text>
         <View style={styles.frontbutton}>
-          <Button title="click here for today's outlook" onPress={() => this.props.navigation.navigate('Index')} color='green' />
+          <Button title="click here to choose a date" onPress={() => this.props.navigation.navigate('Calendar')} color='green' />
         </View>
+
         <View style={styles.quote}>
           <Text>Potentially Hazardous Asteroids (PHAs) are currently defined based on parameters that measure the asteroid’s potential to make threatening close approaches to the Earth.</Text> <Text style={styles.red}>Specifically, all asteroids with a minimum orbit intersection distance (MOID) of 0.05 au or less and an absolute magnitude (H) of 22.0 or less are considered PHAs.</Text>
           <Text>~Center for Near Earth Object Studies, Nasa</Text>
         </View>
       </View>
+
+    );
+  }
+}
+
+class CalendarScreen extends React.Component {
+  static navigationOptions = {
+    title: 'CHOOSE DATE'
+  };
+
+  state = {
+    date: {}
+  }
+
+  onPress = () => {
+    var ddate = this.state.date;
+    this.props.navigation.navigate('Index', {ddate});
+  }
+
+  render() {
+    return (
+<View>
+      <Calendar
+    onChange={(date) => this.setState({date})}
+    selected={this.state.date}
+    // We use Moment.js to give the minimum and maximum dates.
+    minDate={Moment().subtract(10, 'years').startOf('day')}
+    maxDate={Moment().add(10, 'years').startOf('day')}
+    />
+
+
+    <TouchableHighlight onPress={() => this.onPress()}>
+          <View style={styles.frontbutton}><Text>see the asteroids</Text></View></TouchableHighlight>
+
+  </View>
+
     );
   }
 }
 
 class IndexScreen extends React.Component {
   static navigationOptions = {
-    title: 'TODAY'
+    title: 'OUTLOOK'
   };
 
   state = {
     asteroids: [],
-    today: ''
+    today: '',
+    ddate: {}
   }
 
   componentDidMount() {
-    this.makeDate();
+    const { navigation } = this.props;
+    const ddate = navigation.getParam('ddate', 'no ddate...');
+    this.setState({ddate: ddate}, function(){
+      // console.log(this.state.ddate);
+      this.makeDate();
+    });
+  }
+
+  onPress = (asteroid) => {
+    this.props.navigation.navigate('Asteroid', {asteroid});
+  }
+
+  makeDate = () => {
+    // console.log(this.state.ddate);
+    var array = this.state.ddate.toString().split(' ');
+    // console.log(array);
+    var today = '';
+    var dd = array[2];
+    var mm = '';
+    var yyyy = array[3];
+    switch (array[1]) {
+      case 'Jan':
+        mm = '01';
+        break;
+      case 'Feb':
+        mm = '02';
+        break;
+      case 'Mar':
+        mm = '03';
+        break;
+      case 'Apr':
+        mm = '04';
+        break;
+      case 'May':
+        mm = '05';
+        break;
+      case 'Jun':
+        mm = '06';
+        break;
+      case 'Jul':
+        mm = '07';
+        break;
+      case 'Aug':
+        mm = '08';
+        break;
+      case 'Sep':
+        mm = '09';
+        break;
+      case 'Oct':
+        mm = '10';
+        break;
+      case 'Nov':
+        mm = '11';
+        break;
+      case 'Dec':
+        mm = '12';
+        break;
+    }
+
+    today = yyyy + '-' + mm + '-' + dd;
+    this.setState({today: today}, function() {
+      this.getData();
+    });
+
+  }
+
+  getData = () => {
+    // console.log(`https://api.nasa.gov/neo/rest/v1/feed?start_date=${this.state.today}&end_date=${this.state.today}&api_key=LSP2Gn16oEtpqZZr25CbqkRmogQ6TmCEb65QHSA1`);
     axios.get(`https://api.nasa.gov/neo/rest/v1/feed?start_date=${this.state.today}&end_date=${this.state.today}&api_key=LSP2Gn16oEtpqZZr25CbqkRmogQ6TmCEb65QHSA1`)
       .then(res => {
         var x = Object.values(res.data)[2];
@@ -45,30 +154,10 @@ class IndexScreen extends React.Component {
       );
   }
 
-  onPress = (asteroid) => {
-    this.props.navigation.navigate('Asteroid', {asteroid});
-  }
-
-  makeDate = () => {
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1;
-    var yyyy = today.getFullYear();
-
-    if(dd < 10) {
-      dd = '0'+dd;
-    }
-
-    if(mm < 10) {
-      mm = '0'+mm;
-    }
-
-    today = yyyy + '-' + mm + '-' + dd;
-    this.setState({today: today});
-  }
-
 
   render() {
+
+
     return (
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>
@@ -182,6 +271,7 @@ class AsteroidScreen extends React.Component {
 const RootStack = createStackNavigator(
   {
     Home: HomeScreen,
+    Calendar: CalendarScreen,
     Index: IndexScreen,
     Asteroid: AsteroidScreen
   },
