@@ -4,6 +4,7 @@ import { createStackNavigator } from 'react-navigation';
 import axios from 'axios';
 import Calendar from 'react-native-calendar-datepicker';
 import Moment from 'moment';
+import { Font } from 'expo';
 
 
 class HomeScreen extends React.Component {
@@ -290,6 +291,12 @@ const RootStack = createStackNavigator(
 
 
 export default class App extends React.Component {
+  componentDidMount() {
+   Font.loadAsync({
+     'LuckiestGuy-Regular': require('./assets/fonts/LuckiestGuy-Regular.ttf'),
+   });
+ }
+
   render() {
     return <RootStack />;
   }
@@ -328,6 +335,8 @@ const styles = StyleSheet.create({
   },
 
   title: {
+    fontFamily: 'LuckiestGuy-Regular',
+    fontSize: 30,
     width: '100%',
     textAlign: 'center',
     color: 'purple'
