@@ -5,6 +5,7 @@ import axios from 'axios';
 import Calendar from 'react-native-calendar-datepicker';
 import Moment from 'moment';
 import { Font } from 'expo';
+import Expo from 'expo';
 
 
 class HomeScreen extends React.Component {
@@ -16,7 +17,8 @@ class HomeScreen extends React.Component {
     return (
 
       <View style={styles.home}>
-        <Text>!!!APPOCALYPSE!!! is an app that tells you about the asteroids near Earth on a given day, and whether any of them are potentially hazardous.</Text>
+        <Text style={styles.title}>!!!APPOCALYPSE!!!</Text>
+        <Text>is an app that tells you about the asteroids near Earth on a given day, and whether any of them are potentially hazardous.</Text>
         <View style={styles.frontbutton}>
           <Button title="click here to choose a date" onPress={() => this.props.navigation.navigate('Calendar')} color='green' />
         </View>
@@ -291,13 +293,23 @@ const RootStack = createStackNavigator(
 
 
 export default class App extends React.Component {
-  componentDidMount() {
-   Font.loadAsync({
-     'LuckiestGuy-Regular': require('./assets/fonts/LuckiestGuy-Regular.ttf'),
-   });
- }
+
+  state={
+    isReady: false
+  }
+
+  async componentWillMount() {
+    await Expo.Font.loadAsync({
+      'LuckiestGuy-Regular': require('./assets/fonts/LuckiestGuy-Regular.ttf')
+    });
+    this.setState({isReady: true});
+  }
+
 
   render() {
+    if (!this.state.isReady) {
+      return <Expo.AppLoading />;
+    }
     return <RootStack />;
   }
 }
