@@ -36,7 +36,7 @@ class CalendarScreen extends React.Component {
   };
 
   state = {
-    date: {}
+    date: new Date()
   }
 
   onPress = () => {
@@ -46,19 +46,18 @@ class CalendarScreen extends React.Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.cal}>
         <Calendar
           onChange={(date) => this.setState({date})}
           selected={this.state.date}
-          // We use Moment.js to give the minimum and maximum dates.
-          minDate={Moment().subtract(10, 'years').startOf('day')}
-          maxDate={Moment().add(10, 'years').startOf('day')}
+          minDate={Moment().subtract(100, 'years').startOf('day')}
+          maxDate={Moment().add(100, 'years').startOf('day')}
         />
-
-
-
-        <View style={styles.frontbutton}><Button title='see the asteroids' onPress={() => this.onPress()} color='green'/></View>
-
+        <View style={styles.center}>
+          <View style={styles.frontbutton}>
+            <Button title='see the asteroids' onPress={() => this.onPress()} color='green'/>
+          </View>
+        </View>
       </View>
 
     );
@@ -67,7 +66,7 @@ class CalendarScreen extends React.Component {
 
 class IndexScreen extends React.Component {
   static navigationOptions = {
-    title: 'OUTLOOK'
+    title: 'ASTEROIDS'
   };
 
   state = {
@@ -242,7 +241,7 @@ class AsteroidScreen extends React.Component {
          </View>}
 
          <View style={styles.guestbook}>
-           <Text>all my known and knowable visits: {this.state.dates.length}</Text>
+           <Text style={styles.title}>all my known and knowable visits: {this.state.dates.length}</Text>
 
            {this.state.dates.map(date =>
              <View key={date.miss_distance.astronomical} style={styles.roll}>
@@ -296,6 +295,7 @@ export default class App extends React.Component {
   }
 }
 
+
 const styles = StyleSheet.create({
 
   home: {
@@ -305,6 +305,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingLeft: 30,
     paddingRight: 30
+  },
+
+  cal: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    margin: 50
+  },
+
+  center: {
+    alignItems: 'center'
   },
 
   container: {
@@ -317,6 +328,8 @@ const styles = StyleSheet.create({
   },
 
   title: {
+    width: '100%',
+    textAlign: 'center',
     color: 'purple'
   },
 
@@ -327,6 +340,7 @@ const styles = StyleSheet.create({
   },
 
   frontbutton: {
+    width: 250,
     borderRadius: 30,
     borderWidth: 2,
     backgroundColor: 'pink',
@@ -355,12 +369,10 @@ const styles = StyleSheet.create({
   },
 
   roll: {
-    width: 250,
     height: 60,
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 10
+    margin: 30
   },
 
   quote: {
@@ -370,8 +382,12 @@ const styles = StyleSheet.create({
   },
 
   guestbook: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 20,
-    marginTop: 20,
+    margin: 20,
     borderColor: 'pink',
     borderRadius: 20,
     borderWidth: 2
