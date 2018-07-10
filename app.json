@@ -1,5 +1,7 @@
 {
   "expo": {
-    "sdkVersion": "27.0.0"
+    "sdkVersion": "27.0.0",
+    "description": "this app tells you about the asteroids near Earth on a given day, and whether any of them are potentially hazardous.",
+    "name": "appocalypse"
   }
 }
